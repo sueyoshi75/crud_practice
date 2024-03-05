@@ -18,10 +18,11 @@ class PostController extends Controller
             'title' => 'required|min:3|max:40',
             'content' => 'required|min:3|max:255'
         ]);
+        $validated['user_id'] = auth()->id();
 
         Post::create($validated);
 
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with('success', "Created successfully!");
     }
 
     public function show(Post $post){
@@ -40,12 +41,12 @@ class PostController extends Controller
 
         $post->update($validated);
 
-        return redirect()->route('posts.show', $post->id);
+        return redirect()->route('posts.show', $post->id)->with('success', 'Edited successfully!');
     }
 
     public function destroy(Post $post){
         $post->delete();
 
-        return redirect()->route('posts.index');
+        return redirect()->route('posts.index')->with('success', 'Deleted successfully!');
     }
 }

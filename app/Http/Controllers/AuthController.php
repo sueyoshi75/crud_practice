@@ -40,7 +40,18 @@ class AuthController extends Controller
 
         if (auth()->attempt($validated)) {
             request()->session()->regenerate();
-            return redirect()->route('posts.index');
+            return redirect()->route('posts.index')->with('success', 'You are Logged in!');
         }
+
+        return redirect()->route('login')->withErrors([
+            'email' => "No matching user found with the provided email and password"
+        ]);
+    }
+
+    public function logout(){
+        auth()->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect()->route('posts.index')->with('success', 'Logout successfully!');
     }
 }
